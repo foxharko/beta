@@ -1,0 +1,113 @@
+<script>
+
+let tiktokLoaded = false;
+
+document.getElementById("loadTikTokBtn").addEventListener("click", function () {
+
+    if (tiktokLoaded) return;
+    tiktokLoaded = true;
+
+    const button = document.getElementById("loadTikTokBtn");
+    const loader = document.getElementById("tiktokLoader");
+    const widget = document.getElementById("tiktokWidget");
+
+    button.style.display = "none";
+    loader.style.display = "flex";
+
+    widget.innerHTML = `
+        <blockquote
+            class="tiktok-embed"
+            cite="https://www.tiktok.com/@scl.pp.ua"
+            data-unique-id="scl.pp.ua"
+            data-embed-type="creator">
+            
+            <section>
+                <a target="_blank" href="https://www.tiktok.com/@scl.pp.ua">
+                    @scl.pp.ua
+                </a>
+            </section>
+
+        </blockquote>
+    `;
+
+
+    function hideLoader() {
+        setTimeout(() => {
+            loader.style.display = "none";
+            widget.classList.add("show");
+        }, 800);
+    }
+
+
+    if (window.TikTokEmbed) {
+        window.TikTokEmbed.lib.render();
+        hideLoader();
+        return;
+    }
+
+
+    const script = document.createElement("script");
+    script.src = "https://www.tiktok.com/embed.js";
+    script.async = true;
+
+    script.onload = function () {
+        if (window.TikTokEmbed) {
+            window.TikTokEmbed.lib.render();
+        }
+
+        hideLoader();
+    };
+
+    document.body.appendChild(script);
+});
+
+
+</script>
+-------
+<style>
+       .tiktok-box {
+    width: 330px;
+    max-width: 100%;
+}
+
+.tiktok-btn {
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+.tiktok-loader {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    height:100px;
+}
+
+.spinner {
+    width:25px;
+    height:25px;
+    border:3px solid #ccc;
+    border-top-color:#000;
+    border-radius:50%;
+    animation:spin .8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform:rotate(360deg);
+    }
+}
+
+.tiktok-widget {
+    opacity:0;
+    transition:.4s;
+}
+
+.tiktok-widget.show {
+    opacity:1;
+}
+</style>
+
+<div class="tiktok-box"> <button id="loadTikTokBtn" class="tiktok-btn"> Показать TikTok </button> <div id="tiktokLoader" class="tiktok-loader" style="display: none;"> <div class="spinner"></div> <span>Загрузка TikTok...</span> </div>
